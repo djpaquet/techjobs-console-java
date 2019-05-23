@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class JobData {
                 values.add(aValue);
             }
         }
-
+        Collections.sort(values);
         return values;
     }
 
@@ -76,7 +77,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -87,6 +88,29 @@ public class JobData {
     /**
      * Read in data from a CSV file and store it in a list
      */
+
+    public static ArrayList<HashMap<String,String >> findByValue(String value){
+
+        value = value.toLowerCase();
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> job : allJobs){
+            for (String key : job.keySet()) {
+                if( job.get(key).toLowerCase().contains(value.toLowerCase())){
+                    jobs.add(job);
+                    break;
+                }
+            }
+        }
+        return jobs;
+    }
+
+    /** allow users to search a given column of the data for a given String.
+    *enable a search that looks for the search term in all of the columns.
+    */
+
     private static void loadData() {
 
         // Only load data once
